@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 继承
+    // class Animal {
+    //     constructor(name, age){
+    //         this.name = name
+    //         this.age = age
+    //     }
+
+    //     say(){
+    //         console.log(this.name)
+    //     }
+    // }
+
+    // class Dog extends Animal{
+    //     constructor(name,age){
+    //         super(name,age)
+    //     }
+
+    //     hello(){
+    //         console.log(this.age)
+    //     }
+    // }
+
+    // const dog = new Dog('gg', '12')
+    // dog.say()
+    // dog.hello()
+
+
+    // 寄生组合式继承
+    function Animal2(name){
+        this.name = name
+        function say(){
+            console.log(this.name)   
+        }
+    }
+    Animal2.prototype.say2 = function() {
+        console.log('22222222')
+    }
+
+    function dog2(name){
+        Animal2.call(this, name)
+    }
+
+    const proto = Object.create(Animal2.prototype)
+    dog2.prototype = proto
+    proto.constructor = dog2;
+
+
+    const dg2 = new dog2('gg')
+    dg2.say2()
+</script>
+</html>

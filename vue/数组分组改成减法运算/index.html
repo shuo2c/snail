@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //这个题的意思就是 [5, [[4, 3], 2, 1]] 变成 (5 - ((4 - 3) - 2 - 1)) 并执行。 且不能使用eval()
+
+    const a = [5, [[4, 3], 2, 1], [4,3]]
+    
+    function run(arr) {
+      return arr.reduce((pre, cur) => {
+        let first = Array.isArray(pre) ? run(pre) : pre
+        let last = Array.isArray(cur) ? run(cur) : cur
+        return first - last
+      })
+    }
+   
+   console.log(run(a))
+</script>
+</html>

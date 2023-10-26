@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+        function sleep(time) {
+            const dateTime = Date.now()
+            while(true){
+                if(Date.now() - dateTime > time){
+                    break
+                }
+            }
+        }
+        console.log('1')
+        sleep(1000)
+        console.log('2')
+    </script>
+</body>
+</html>

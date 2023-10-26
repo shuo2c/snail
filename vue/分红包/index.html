@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 分红包
+    function generateRedPackets(totalAmount, numPackets) {
+        const minAmount = 0.01;
+        const maxAmount = 8; // 最大不能超过3
+        
+        // 生成 numPackets 个随机数
+        const randomAmounts = [];
+        let remainingAmount = totalAmount;
+        
+        for (let i =1; i < numPackets; i++) {
+            //保证取的范围能取满5，所以随机数的最高范围应该是前面都取最小时的最坏情况
+            const maxPossibleAmount = remainingAmount - ( minAmount * (numPackets - i));
+
+            //注意范围,剩余量保证以及本身的最大值保证
+            let random = Math.random() * (Math.min(maxPossibleAmount, maxAmount));
+            if(!random){
+                random = minAmount
+            }
+            const randomAmount = parseFloat(random.toFixed(2)); // 保留两位小数
+            randomAmounts.push(randomAmount);
+            
+            remainingAmount -= randomAmount;
+        }
+        
+        randomAmounts.push(parseFloat(remainingAmount.toFixed(2))); // 最后一个红包取剩余金额
+        
+        return randomAmounts;
+        }
+ 
+        const totalAmount = 15;
+        const numPackets = 5;
+        const redPackets = generateRedPackets(totalAmount, numPackets);
+        
+        console.log(redPackets, 'redPackets')
+</script>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 手写 call bind apply
+
+        Function.prototype.MyCall = function(context, ...args) {
+            if(typeof this !== 'function'){
+                throw new Error('type error')
+            }
+
+            if(context === null || context === undefined){
+                context = window
+            }else {
+                context = Object(context)
+            }
+
+            const symbalKey =  Symbol()
+            context[symbalKey] = this
+
+            const result = context[symbalKey](...args)
+
+            delete context[symbalKey]
+
+            return result;
+
+        }
+        
+        // apply
+        Function.prototype.MyApply = function(context, args = []) {
+            if(typeof this !== 'function'){
+                throw new Error('type error')
+            }
+            if(context === null || context === undefined) {
+                context = window
+            }else {
+                context = Object(context)
+            }
+
+            const fnSyl = Symbol()
+            context[fnSyl] = this
+            const result = context[fnSyl](...args)
+
+            delete context[fnSyl]
+
+            return result
+        }
+
+        // bind
+        Function.prototype.MyBind = function(context, ...args) {
+            if(typeof this !== 'function'){
+                throw new Error('type error')
+            }
+            if(context === null || context === undefined) {
+                context = window
+            }else {
+                context = Object(context)
+            }
+
+            const self = this
+
+            return function fn(...newFnArgs) {
+                if (this instanceof fn) {
+                    return new self(...args, ...newFnArgs)
+                }else {
+                    const fnSyl = Symbol()
+                    context[fnSyl] = self
+                    const result = context[fnSyl](...args, ...newFnArgs)
+
+                    delete context[fnSyl]
+
+                    return result
+                }
+            }
+        }
+
+
+
+
+        // text
+        function show(){
+            console.log(this.name, '???11??')
+        }
+
+        class child {
+            constructor(name){
+                this.name = name
+            }
+        }
+
+        const childObj = new child('2222')
+
+        console.log( new (show.MyBind(childObj)))
+    </script>
+</body>
+</html>
