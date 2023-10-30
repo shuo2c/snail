@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas绘制树状结构</title>
+  
+  <!-- <script src="./arrow.js" type="module"></script>
+  <script src="./element.js" type="module"></script>
+  <script src="./group.js" type="module"></script>
+  <script src="./main.js" type="module"></script>
+  <script src="./util.js" type="module"></script> -->
+
+</head>
+<body>
+  <canvas id="canvas" width="1800" height="800" style="width: 1800px;height: 800px;border: 1px solid gray;margin: auto;display: flex;"></canvas>
+</body>
+</html>
+<script type="module">
+  import main from './main.js';
+  // 数据格式如下，主要是children字段
+  var s = {
+    level: -1,
+    children: [
+      {
+        level: 0,
+        children: [
+          {
+            level: 1,
+            needBorder: true,
+            children: [
+              {
+                level: 2,
+                children: []
+              },
+              {
+                level: 2,
+                children: []
+              },
+              {
+                level: 2,
+                children: []
+              }
+            ]
+          },
+          {
+            level: 2,
+            children: []
+          },
+          {
+            level: 2,
+            children: []
+          },
+        ]
+      },
+      {
+        level: 0,
+        children: [
+          {
+            level: 1,
+            children: [
+              {
+                level: 2,
+                children: [
+                ],
+              },
+            ]
+          }
+        ]
+      },
+      {
+        level: 0,
+        children: [
+        {
+            level: 1,
+            needBorder: true,
+            children: [
+              {
+                level: 2,
+                children: []
+              },
+              {
+                level: 2,
+                children: []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        level: 0,
+        children: [
+        {
+            level: 1,
+            needBorder: true,
+            children: [
+              {
+                level: 2,
+                children: []
+              },
+              {
+                level: 2,
+                children: []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        level: 0,
+        children: [
+        {
+            level: 1,
+            needBorder: true,
+            children: [
+              {
+                level: 2,
+                children: []
+              },
+              {
+                level: 2,
+                children: []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        level: 0,
+        children: [
+        {
+            level: 1,
+            needBorder: true,
+            children: [
+              {
+                level: 2,
+                children: []
+              },
+              {
+                level: 2,
+                children: [
+                  // {
+                  //   level: 2,
+                  //   needBorder: true,
+                  //   children: []
+                  // }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+
+  // 设置属性
+  function setAttr(data, params, index) {
+    data.text = params.text + '_' + index;
+    if (data.children) {
+      data.children.forEach((e, i) => {
+        setAttr(e, { text: data.text }, i);
+      })
+    }
+  }
+
+  // 界面加载
+  window.onload = (() => {
+    // 加文字描述
+    setAttr(s, {text: '' }, 0);
+    // 初始化
+    main.init({
+      data: s,
+      id: 'canvas'
+    });
+  })
+</script>

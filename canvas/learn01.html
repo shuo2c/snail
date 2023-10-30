@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <canvas width="600" height="400" id="canvas" ></canvas> -->
+    </div>
+</body>
+<script>
+
+    // // 获取canvas
+    // const canvas = document.getElementById('canvas')
+    // // 获取context(画笔)对象
+    // const context = canvas.getContext('2d') 
+    // // 画出形状 方形
+    // context.fillRect(100,100,200,200)
+
+
+    // js的方式
+    const canvas = document.createElement('canvas')
+    canvas.width = 600
+    canvas.height = 600
+    document.body.append(canvas)
+    const context = canvas.getContext('2d')
+    
+    // 方形
+    // context.fillRect(100,100,200,200)
+
+    // 绘制线段(直线，折现，颜色，粗细)
+    
+    context.moveTo(100,100)
+    context.lineTo(200,120)
+    context.lineTo(300,180)
+    context.lineWidth = 10
+    context.strokeStyle = '#0c0'
+    context.stroke()
+
+    
+    context.lineTo(400,100)
+    context.lineWidth = 5 // 支持重新覆盖后面的线条
+    context.strokeStyle = '#ddd' // 全体覆盖？？？？
+
+    const gradient = context.createLinearGradient(0,0,600,400)
+    gradient.addColorStop(0,'red') // 0 ~ 1 添加 
+    gradient.addColorStop(0.25,'hotpink')
+    gradient.addColorStop(1, 'blue')
+    context.strokeStyle = gradient
+    context.stroke()
+
+</script>
+</html>
