@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>柱状图</title>
+</head>
+<body>
+  <canvas id="canvas" width='600' height='400'></canvas>
+</body>
+</html>
+<script>
+  class BarChart{
+    constructor(id){
+      this.canvas = document.getElementById(id);
+      // 创造绘画环境
+      this.ctx = this.canvas.getContext('2d');
+      
+      this.setRatio()
+      this.cPadding = 80;// 内边距
+      this.yAxisH = this.canvas.height - this.cPadding * 2;// 纵轴的高度
+      this.xAxixW = this.canvas.width  - this.cPadding * 2;// 横轴的宽度
+      this.originX = this.cPadding;// 原点的横坐标
+      this.originY = this.yAxisH + this.cPadding;//原点的纵坐标
+      this.yAxisNum = 10;// 总左边分的段数
+      this.xAxisNum = 0;// 横坐标的段数
+      this.data = []// 存储传进来的数据
+
+      this.count = 0;
+    }
+    init(){
+      this.ctx.font = '20px Arial'
+      // 画一个坐标系
+      this.drawAxis()
+      this.bindEvent();
+    }
+    setData(ary){
+      this.data = ary;
+      this.xAxisNum = ary.length;
+      this.init()
+    }
+    setRatio(){
+      let device = window.devicePixelRatio || 1;
+      let canDevice = this.ctx.backingStorePixelRatio || 1;
+      let ratio = device/canDevice;
+      let oldW = this.canvas.width,
+          oldH = this.canvas.height;
+      this.canvas.width = ratio *  oldW;   
+      this.canvas.height = ratio *  oldH;  
+      this.canvas.style.width = oldW + 'px';
+      this.canvas.style.height = oldH + 'px'; 
+    }
+    drawLine(x,y,x2,y2){
+      // xy 对应的其实坐标   x2y2对应终点坐标
+      this.ctx.beginPath();
+      this.ctx.lineWidth = 1;// 设置线的宽度1个像素
+      this.ctx.moveTo(x,y)
+      this.ctx.lineTo(x2,y2);
+      this.ctx.stroke();
+      this.ctx.closePath()
+    }
+    drawAxis(){
+      this.ctx.translate(0.5,0.5);//把 canvas的坐标原点 设置到 0.5,0.5的位置；// 解决 线模糊的问题
+
+      //定义一下线条的颜色
+      this.ctx.strokeStyle = '#333';
+      // 画y轴
+      this.drawLine(this.originX,this.originY,this.originX,this.cPadding)
+      // 画x轴
+      this.drawLine(this.originX,this.originY,this.canvas.width - this.cPadding,this.originY)
+
+      // 画刻度
+      this.drawMarker()
+      this.drawBar()
+
+      this.ctx.translate(-0.5,-0.5);
+    }
+    drawMarker(){
+      // 画刻度
+      // 画 Y轴
+      let oneYVal = this.yAxisH / this.yAxisNum;
+      this.ctx.textAlign = 'right';
+      for(let i = 0; i <= this.yAxisNum;i++){
+        // 写字
+        this.ctx.fillText(i*100,this.originX - 10,this.originY - i * oneYVal + 5)
+        if(i > 0 ){
+          this.ctx.strokeStyle = '#333'
+          this.drawLine(this.originX,this.originY - i*oneYVal,this.originX - 5,this.originY - i*oneYVal)
+          this.ctx.strokeStyle = 'red'
+          this.drawLine(this.originX,this.originY - i*oneYVal,this.canvas.width - this.cPadding,this.originY - i*oneYVal)
+        }
+      }
+
+      this.ctx.save();
+      this.ctx.font = '30px Arial'
+      this.ctx.rotate(-Math.PI/2)
+      this.ctx.fillText("产量",-this.canvas.height/2,20)
+      this.ctx.restore()
+
+      // 画X轴
+      let oneXVal = this.xAxixW / this.xAxisNum;
+      this.ctx.strokeStyle = '#333';
+      this.ctx.textAlign = 'center';
+      for(let i = 0; i < this.xAxisNum; i++){
+        this.ctx.fillText(this.data[i][0],this.originX + (i+1) * oneXVal - oneXVal/2,this.originY + 20)
+        this.drawLine(this.originX + (i+1) * oneXVal,this.originY,this.originX + (i+1) * oneXVal,this.originY+5)
+      }
+      this.ctx.save();
+      this.ctx.font = '30px Arial'
+      this.ctx.fillText("年份",this.canvas.width/2,this.originY + 50)
+      this.ctx.restore()
+
+    }
+    drawRect(x,y,w,h){
+      this.ctx.beginPath();
+      this.ctx.rect(x,y,w,h);
+      let color = this.ctx.createLinearGradient(0,0,0,500);
+      color.addColorStop(0,'red')
+      color.addColorStop(0.5,'yellow')
+      color.addColorStop(1,'blue')
+      this.ctx.fillStyle = color;
+      this.ctx.strokeStyle = color;
+      this.ctx.fill();
+      this.ctx.closePath();
+    }
+    drawBar(){
+      let oneXVal = this.xAxixW / this.xAxisNum;
+      let barW = oneXVal/2;
+      for(let i = 0; i < this.xAxisNum; i++){
+        let barH = this.data[i][1]*this.yAxisH/1000 * (this.count/100);
+        let y = this.originY - barH;
+        let x = this.originX + i * oneXVal + barW/2;
+        this.drawRect(x,y,barW,barH)
+        this.ctx.fillText(this.data[i][1],x+barW/2,y - 10)
+      }
+      this.animateID = requestAnimationFrame(()=>{this.animate()})
+    }
+    animate(){
+      this.count ++;
+      if(this.count <= 100){
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height)
+        this.drawAxis()
+      }else{
+        this.count = 100
+      }
+    }
+    bindEvent(){
+      this.canvas.addEventListener('click',()=>{
+        window.cancelAnimationFrame(this.animateID)
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        this.count = 0;
+        this.setData(this.data)
+      })
+    }
+  }
+
+  let bar = new BarChart('canvas');
+  let data =  [[2007, 750], [2008, 425], [2009, 960], [2010, 700], [2011, 800], [2012, 975], [2013, 375], [2014, 775]];
+  bar.setData(data);
+</script>

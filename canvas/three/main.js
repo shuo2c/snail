@@ -16,6 +16,7 @@ function init(options) {
 
   // 计算每个父节点包含的所有子和孙节点数据个数
   const numData = util.countNum(cloneData);
+  console.log(numData, 'numData')
 
   // 计算每个节点的横纵坐标范围
   const rangeData = util.calRange(numData);

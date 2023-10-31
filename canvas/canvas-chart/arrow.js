@@ -13,6 +13,7 @@ export default class Arrow {
     this.to = toEle;
     // 箭头坐标信息
     this.coordinates = this.getCoordinate();
+    this.ctx = fromEle.ctx
   }
 
   /**
@@ -22,10 +23,11 @@ export default class Arrow {
   getCoordinate() {
     const fromC = this.from.center;
     const toC = this.to.center;
+    console.log(fromC, toC, '?????s')
     return [
-      [fromC[0], fromC[1] + this.from.height / 2],
-      [toC[0], toC[1] - (toC[1] - fromC[1]) / 2],
-      [toC[0], toC[1] - this.to.height / 2]
+      [fromC[0] + this.from.width / 2, fromC[1]],
+      [(toC[0] + fromC[0]) / 2.3, (toC[1] + fromC[1])/2],
+      [toC[0]- this.to.width / 2, toC[1]+ this.to.height/4]
     ]
   }
 
@@ -34,7 +36,7 @@ export default class Arrow {
    */
   draw() {
     const coor = this.coordinates;
-    const ctx = util.getContext();
+    const ctx = this.ctx
     
     ctx.save();
     ctx.lineWidth = 1;
@@ -44,14 +46,14 @@ export default class Arrow {
     // ctx.setLineDash([5, 2]);
 
     ctx.beginPath();
-    ctx.moveTo(coor[0][0], coor[0][1]);
+    // ctx.moveTo(coor[0][0], coor[0][1]);
     // ctx.lineTo(coor[1][0], coor[1][1]);
     // ctx.lineTo(coor[2][0], coor[2][1] - 10);
     ctx.bezierCurveTo(coor[0][0], coor[0][1], coor[1][0], coor[1][1], coor[2][0], coor[2][1] - 10)
     ctx.stroke();
     ctx.restore();
     
-    this.drawArrow(ctx, coor[2]);
+    // this.drawArrow(ctx, coor[2]);
   }
 
   /**

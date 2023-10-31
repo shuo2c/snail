@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chart</title>
+    <style lang="css">
+        :root {
+            border: 0px;
+            padding: 0px;
+            margin: 0px;
+            height: 100%;
+            width: 100%;
+        }
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+        }
+        .canvas-container {
+            height: 100%;
+            width: 100%;
+        }
+        
+        #canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-container"></div>
+</body>
+<script type="module">
+    import main from './main.js'
+
+    const TreeData  = {
+        level: -1,
+        children: [
+        {
+            level: 0,
+            children: [
+            {
+                level: 1,
+                needBorder: true,
+                children: [
+                {
+                    level: 2,
+                    children: []
+                },
+                {
+                    level: 2,
+                    children: []
+                },
+                {
+                    level: 2,
+                    children: []
+                }]
+            },
+            {
+                level: 2,
+                children: []
+            }]
+        },
+        {
+            level: 0,
+            children: [{
+                level: 1,
+                children: [{
+                    level: 2,
+                    children: [],
+                }]
+            }]
+        }]
+    };
+
+    // 界面加载
+    window.onload = (() => {
+        // 初始化
+        main.init({ data: TreeData, el: 'canvas-container', id: 'canvas'});
+    })
+
+</script>
+</html>
